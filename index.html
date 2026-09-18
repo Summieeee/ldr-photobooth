@@ -3,709 +3,329 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LDR SnapBox 💗</title>
+<title>LDR Together Booth 💗</title>
 
 <style>
-    * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-    }
-
-    body {
-        min-height: 100vh;
-        font-family: Arial, Helvetica, sans-serif;
-        background:
-            radial-gradient(circle at 20% 20%, #ff6b9d33, transparent 30%),
-            radial-gradient(circle at 80% 80%, #8b5cf633, transparent 30%),
-            linear-gradient(135deg, #140b18, #241020, #120914);
-        color: white;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 25px;
-        overflow-x: hidden;
-    }
-
-    body::before {
-        content: "♥  ✦  ♡  ✧  ♥  ✦  ♡  ✧  ♥  ✦";
-        position: fixed;
-        top: 8%;
-        left: 0;
-        width: 100%;
-        text-align: center;
-        color: #ffffff12;
-        font-size: 55px;
-        pointer-events: none;
-        letter-spacing: 25px;
-    }
-
-    .app {
-        width: min(1050px, 100%);
-        background: rgba(255,255,255,.08);
-        border: 1px solid rgba(255,255,255,.13);
-        backdrop-filter: blur(25px);
-        border-radius: 30px;
-        padding: 28px;
-        box-shadow: 0 30px 100px rgba(0,0,0,.45);
-    }
-
-    header {
-        text-align: center;
-        margin-bottom: 25px;
-    }
-
-    header h1 {
-        font-size: clamp(30px, 5vw, 50px);
-        margin-bottom: 8px;
-    }
-
-    header p {
-        color: #ffc8da;
-    }
-
-    .screen {
-        display: none;
-    }
-
-    .screen.active {
-        display: block;
-    }
-
-    .home-box {
-        max-width: 600px;
-        margin: auto;
-        text-align: center;
-    }
-
-    .heart {
-        font-size: 80px;
-        animation: heartbeat 1.4s infinite;
-        margin-bottom: 10px;
-    }
-
-    @keyframes heartbeat {
-        0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.1); }
-    }
-
-    input {
-        width: 100%;
-        padding: 15px 18px;
-        border-radius: 15px;
-        border: 1px solid #ffffff22;
-        background: #ffffff0d;
-        color: white;
-        outline: none;
-        margin: 8px 0;
-        font-size: 16px;
-    }
-
-    input::placeholder {
-        color: #ffffff77;
-    }
-
-    button {
-        border: none;
-        cursor: pointer;
-        padding: 13px 18px;
-        border-radius: 14px;
-        color: white;
-        background: linear-gradient(135deg, #ff4f88, #a855f7);
-        font-weight: bold;
-        font-size: 15px;
-        transition: .2s;
-    }
-
-    button:hover {
-        transform: translateY(-2px);
-        filter: brightness(1.1);
-    }
-
-    button:disabled {
-        opacity: .45;
-        cursor: not-allowed;
-        transform: none;
-    }
-
-    .secondary {
-        background: #ffffff12;
-        border: 1px solid #ffffff1c;
-    }
-
-    .danger {
-        background: #ef4444;
-    }
-
-    .tabs {
-        display: flex;
-        gap: 8px;
-        margin: 20px 0;
-        background: #00000022;
-        padding: 6px;
-        border-radius: 16px;
-    }
-
-    .tab {
-        flex: 1;
-        background: transparent;
-    }
-
-    .tab.active {
-        background: #ffffff16;
-    }
-
-    .form {
-        display: none;
-    }
-
-    .form.active {
-        display: block;
-    }
-
-    .room-code {
-        font-size: 38px;
-        font-weight: 900;
-        letter-spacing: 9px;
-        color: #ff9abd;
-        margin: 15px 0;
-    }
-
-    .status {
-        text-align: center;
-        margin: 15px 0;
-        color: #ffd4e2;
-        min-height: 24px;
-    }
-
-    .camera-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 18px;
-        margin-top: 20px;
-    }
-
-    .camera-card {
-        background: #00000030;
-        border: 1px solid #ffffff12;
-        padding: 14px;
-        border-radius: 22px;
-    }
-
-    .camera-title {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 10px;
-    }
-
-    .camera-title small {
-        color: #ffb5ce;
-    }
-
-    .video-wrap {
-        position: relative;
-        width: 100%;
-        aspect-ratio: 4 / 3;
-        background: #080508;
-        border-radius: 17px;
-        overflow: hidden;
-    }
-
-    video {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transform: scaleX(-1);
-    }
-
-    .remote-placeholder {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        gap: 8px;
-        color: #ffffff77;
-        font-size: 15px;
-        text-align: center;
-        padding: 20px;
-    }
-
-    .remote-placeholder span {
-        font-size: 45px;
-    }
-
-    .controls {
-        display: flex;
-        gap: 8px;
-        flex-wrap: wrap;
-        margin-top: 12px;
-    }
-
-    .controls button {
-        flex: 1;
-        min-width: 120px;
-    }
-
-    .filters {
-        display: flex;
-        gap: 7px;
-        overflow-x: auto;
-        padding: 12px 0 4px;
-    }
-
-    .filter-btn {
-        background: #ffffff0c;
-        border: 1px solid #ffffff12;
-        white-space: nowrap;
-        padding: 9px 13px;
-        font-size: 13px;
-    }
-
-    .filter-btn.active {
-        background: #ff4f8844;
-        border-color: #ff719c;
-    }
-
-    .ready-panel {
-        margin-top: 20px;
-        background: #00000025;
-        border-radius: 20px;
-        padding: 18px;
-        text-align: center;
-    }
-
-    .people {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-        margin: 15px 0;
-    }
-
-    .person {
-        background: #ffffff09;
-        padding: 14px;
-        border-radius: 15px;
-        border: 1px solid #ffffff0c;
-    }
-
-    .person.ready {
-        border-color: #50fa9d;
-        background: #50fa9d12;
-    }
-
-    .check {
-        color: #50fa9d;
-        font-weight: bold;
-    }
-
-    .big-ready {
-        width: 100%;
-        font-size: 18px;
-        padding: 16px;
-    }
-
-    .countdown {
-        position: fixed;
-        inset: 0;
-        background: rgba(10,5,12,.88);
-        backdrop-filter: blur(15px);
-        display: none;
-        justify-content: center;
-        align-items: center;
-        z-index: 100;
-    }
-
-    .countdown.show {
-        display: flex;
-    }
-
-    .count-number {
-        font-size: min(35vw, 240px);
-        font-weight: 900;
-        color: #ff76a4;
-        text-shadow: 0 0 50px #ff3d7f;
-        animation: pop .8s ease;
-    }
-
-    @keyframes pop {
-        from {
-            transform: scale(1.5);
-            opacity: 0;
-        }
-        to {
-            transform: scale(1);
-            opacity: 1;
-        }
-    }
-
-    .flash {
-        position: fixed;
-        inset: 0;
-        background: white;
-        opacity: 0;
-        pointer-events: none;
-        z-index: 150;
-    }
-
-    .flash.active {
-        animation: flash .45s ease;
-    }
-
-    @keyframes flash {
-        0% { opacity: 0; }
-        20% { opacity: .95; }
-        100% { opacity: 0; }
-    }
-
-    .result {
-        text-align: center;
-    }
-
-    .result h2 {
-        font-size: 32px;
-        margin-bottom: 8px;
-    }
-
-    .result p {
-        color: #ffc4d8;
-        margin-bottom: 20px;
-    }
-
-    #resultCanvas {
-        width: min(700px, 100%);
-        border-radius: 20px;
-        display: block;
-        margin: auto;
-        box-shadow: 0 20px 60px #00000066;
-        background: white;
-    }
-
-    .result-buttons {
-        display: flex;
-        gap: 10px;
-        justify-content: center;
-        flex-wrap: wrap;
-        margin-top: 18px;
-    }
-
-    .room-info {
-        text-align: center;
-        margin-bottom: 15px;
-        color: #ffffff99;
-    }
-
-    .room-info strong {
-        color: #ff9cbb;
-        letter-spacing: 3px;
-    }
-
-    .error {
-        background: #ef444422;
-        border: 1px solid #ef444455;
-        padding: 12px;
-        border-radius: 13px;
-        color: #ffb4b4;
-        margin-top: 12px;
-        display: none;
-    }
-
-    .success {
-        background: #50fa9d18;
-        border: 1px solid #50fa9d44;
-        padding: 12px;
-        border-radius: 13px;
-        color: #a9ffd0;
-        margin-top: 12px;
-        display: none;
-    }
-
-    .loading {
-        display: none;
-        text-align: center;
-        color: #ffc4d8;
-        margin: 10px;
-    }
-
-    @media(max-width: 750px) {
-        .camera-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .people {
-            grid-template-columns: 1fr;
-        }
-
-        .app {
-            padding: 18px;
-        }
-    }
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    background:
+        radial-gradient(circle at 20% 20%, #ff6b9d44, transparent 30%),
+        radial-gradient(circle at 80% 80%, #9b59ff44, transparent 30%),
+        #160d18;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+}
+
+.container {
+    width: min(1050px, 94%);
+    text-align: center;
+    padding: 30px 15px;
+}
+
+h1 {
+    font-size: clamp(35px, 7vw, 65px);
+    margin: 0;
+    letter-spacing: -2px;
+}
+
+.subtitle {
+    opacity: .75;
+    margin: 8px 0 30px;
+}
+
+.card {
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.14);
+    backdrop-filter: blur(18px);
+    border-radius: 28px;
+    padding: 25px;
+    box-shadow: 0 20px 70px #0008;
+}
+
+input {
+    width: min(400px, 100%);
+    padding: 15px 18px;
+    border-radius: 15px;
+    border: none;
+    outline: none;
+    margin: 7px;
+    font-size: 16px;
+}
+
+button {
+    border: none;
+    border-radius: 15px;
+    padding: 14px 22px;
+    margin: 7px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    background: #ff477e;
+    color: white;
+    transition: .2s;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+}
+
+.secondary {
+    background: rgba(255,255,255,.12);
+}
+
+.hidden {
+    display: none !important;
+}
+
+.room-code {
+    font-size: 38px;
+    letter-spacing: 8px;
+    font-weight: bold;
+    margin: 15px;
+    color: #ff91b3;
+}
+
+.status {
+    margin: 15px;
+    min-height: 25px;
+    opacity: .85;
+}
+
+.people {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 25px;
+}
+
+.person {
+    flex: 1;
+    min-width: 280px;
+    max-width: 470px;
+}
+
+.person h3 {
+    margin: 10px;
+}
+
+.video-box {
+    position: relative;
+    border-radius: 22px;
+    overflow: hidden;
+    background: #090609;
+    aspect-ratio: 4/3;
+}
+
+video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scaleX(-1);
+}
+
+.ready {
+    color: #7dffae;
+    font-weight: bold;
+}
+
+#countdown {
+    font-size: 100px;
+    font-weight: 900;
+    position: fixed;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #0008;
+    z-index: 100;
+    pointer-events: none;
+}
+
+#resultCanvas {
+    width: min(850px, 100%);
+    border-radius: 20px;
+    margin-top: 20px;
+    box-shadow: 0 20px 70px #0009;
+}
+
+.scene-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.scene-buttons button {
+    background: rgba(255,255,255,.12);
+}
+
+.scene-buttons button.active {
+    background: #ff477e;
+}
+
+.small {
+    opacity: .6;
+    font-size: 13px;
+}
 </style>
 </head>
 
 <body>
 
-<div class="app">
+<div class="container">
 
-    <header>
-        <h1>📸 LDR SnapBox 💗</h1>
-        <p>Two places. One moment. One photo. ✨</p>
-    </header>
+    <h1>Us, Together 💗</h1>
+    <div class="subtitle">
+        A photobooth for two people who aren't in the same place.
+    </div>
 
     <!-- HOME -->
-    <section id="homeScreen" class="screen active">
+    <div id="home" class="card">
 
-        <div class="home-box">
+        <input id="nameInput" placeholder="Your name">
 
-            <div class="heart">💗</div>
+        <br>
 
-            <h2>Take a photo together</h2>
+        <button onclick="createRoom()">
+            ✨ Create Room
+        </button>
 
-            <p style="color:#ffffff99; margin:10px 0 20px;">
-                Create a room, send the code to your person,
-                and take a synchronized photo from different places.
-            </p>
+        <button class="secondary" onclick="showJoin()">
+            💌 Join Room
+        </button>
 
-            <div class="tabs">
-                <button class="tab active" onclick="switchTab('create')">
-                    Create Room
-                </button>
-
-                <button class="tab" onclick="switchTab('join')">
-                    Join Room
-                </button>
-            </div>
-
-            <div id="createForm" class="form active">
-
-                <input
-                    id="createName"
-                    placeholder="Your name 💕"
-                    maxlength="20"
-                >
-
-                <button
-                    style="width:100%; margin-top:8px;"
-                    onclick="createRoom()"
-                >
-                    ✨ Create Room
-                </button>
-
-            </div>
-
-            <div id="joinForm" class="form">
-
-                <input
-                    id="joinName"
-                    placeholder="Your name 💕"
-                    maxlength="20"
-                >
-
-                <input
-                    id="joinCode"
-                    placeholder="ROOM CODE"
-                    maxlength="6"
-                    style="text-transform:uppercase; text-align:center; letter-spacing:5px;"
-                >
-
-                <button
-                    style="width:100%; margin-top:8px;"
-                    onclick="joinRoom()"
-                >
-                    💌 Join Room
-                </button>
-
-            </div>
-
-            <div id="homeError" class="error"></div>
-            <div id="loading" class="loading">Connecting... 💫</div>
-
+        <div id="joinArea" class="hidden">
+            <input id="roomInput" placeholder="6-letter room code">
+            <br>
+            <button onclick="joinRoom()">
+                Join 💗
+            </button>
         </div>
 
-    </section>
+        <div id="homeStatus" class="status"></div>
+    </div>
 
 
     <!-- ROOM -->
-    <section id="roomScreen" class="screen">
+    <div id="room" class="card hidden">
 
-        <div class="room-info">
-            Room:
-            <strong id="roomCodeDisplay">------</strong>
+        <div class="small">ROOM CODE</div>
+
+        <div id="roomCode" class="room-code">
+            ------
         </div>
 
-        <div class="status" id="statusText">
-            Waiting for your person...
+        <div class="small">
+            Send this code to your person 💌
         </div>
 
-        <div class="camera-grid">
+        <div id="status" class="status">
+            Waiting...
+        </div>
 
-            <!-- LOCAL CAMERA -->
-            <div class="camera-card">
+        <div class="people">
 
-                <div class="camera-title">
-                    <strong id="localName">You</strong>
-                    <small>YOUR CAMERA</small>
+            <div class="person">
+                <h3 id="myName">You</h3>
+
+                <div class="video-box">
+                    <video id="myVideo" autoplay muted playsinline></video>
                 </div>
 
-                <div class="video-wrap">
-                    <video id="localVideo" autoplay muted playsinline></video>
+                <div id="myReadyText">
+                    Not ready
                 </div>
 
-                <div class="filters">
-
-                    <button class="filter-btn active"
-                        onclick="setFilter('normal', this)">
-                        Normal
-                    </button>
-
-                    <button class="filter-btn"
-                        onclick="setFilter('bw', this)">
-                        B&W
-                    </button>
-
-                    <button class="filter-btn"
-                        onclick="setFilter('vintage', this)">
-                        Vintage
-                    </button>
-
-                    <button class="filter-btn"
-                        onclick="setFilter('pink', this)">
-                        Pink
-                    </button>
-
-                    <button class="filter-btn"
-                        onclick="setFilter('dreamy', this)">
-                        Dreamy
-                    </button>
-
-                </div>
-
-                <div class="controls">
-
-                    <button class="secondary"
-                        onclick="switchCamera()">
-                        🔄 Switch Camera
-                    </button>
-
-                </div>
-
+                <button onclick="toggleReady()">
+                    READY 💗
+                </button>
             </div>
 
 
-            <!-- PARTNER -->
-            <div class="camera-card">
+            <div class="person">
+                <h3 id="partnerName">
+                    Waiting for partner...
+                </h3>
 
-                <div class="camera-title">
-                    <strong id="partnerName">Waiting...</strong>
-                    <small>PARTNER</small>
+                <div class="video-box">
+                    <video id="partnerVideo" autoplay muted playsinline></video>
                 </div>
 
-                <div class="video-wrap">
-
-                    <div
-                        class="remote-placeholder"
-                        id="partnerWaiting"
-                    >
-                        <span>💗</span>
-                        Waiting for your person to join...
-                    </div>
-
+                <div id="partnerReadyText">
+                    Waiting...
                 </div>
-
             </div>
 
         </div>
 
+        <br>
 
-        <div class="ready-panel">
+        <button class="secondary" onclick="takeAnother()">
+            🔄 Reset
+        </button>
 
-            <h3>Are you ready? 📸</h3>
-
-            <div class="people">
-
-                <div class="person" id="person1">
-                    <div id="person1Name">Waiting...</div>
-                    <div id="person1Status">Not ready</div>
-                </div>
-
-                <div class="person" id="person2">
-                    <div id="person2Name">Waiting...</div>
-                    <div id="person2Status">Not ready</div>
-                </div>
-
-            </div>
-
-            <button
-                id="readyButton"
-                class="big-ready"
-                onclick="toggleReady()"
-            >
-                💗 I'M READY
-            </button>
-
-            <button
-                class="secondary"
-                style="width:100%; margin-top:10px;"
-                onclick="leaveRoom()"
-            >
-                Leave Room
-            </button>
-
-            <div id="roomError" class="error"></div>
-
-        </div>
-
-    </section>
+    </div>
 
 
     <!-- RESULT -->
-    <section id="resultScreen" class="screen">
+    <div id="result" class="card hidden">
 
-        <div class="result">
+        <h2>You two, together 🥹💗</h2>
 
-            <h2>Our Moment 💗</h2>
+        <p>
+            Choose your shared background:
+        </p>
 
-            <p>
-                Different places, same moment.
-            </p>
+        <div class="scene-buttons">
 
-            <canvas id="resultCanvas"></canvas>
+            <button class="active" onclick="changeScene('pink', this)">
+                💗 Pink
+            </button>
 
-            <div class="result-buttons">
+            <button onclick="changeScene('galaxy', this)">
+                🌌 Galaxy
+            </button>
 
-                <button onclick="downloadResult()">
-                    ⬇️ Download
-                </button>
+            <button onclick="changeScene('sunset', this)">
+                🌅 Sunset
+            </button>
 
-                <button class="secondary" onclick="takeAnother()">
-                    📸 Take Another
-                </button>
-
-                <button class="danger" onclick="leaveRoom()">
-                    🚪 Leave Room
-                </button>
-
-            </div>
+            <button onclick="changeScene('room', this)">
+                🛋️ Cozy
+            </button>
 
         </div>
 
-    </section>
+        <canvas id="resultCanvas"></canvas>
 
-</div>
+        <br>
 
+        <button onclick="downloadPhoto()">
+            📥 Download Photo
+        </button>
 
-<!-- COUNTDOWN -->
-<div class="countdown" id="countdown">
+        <button class="secondary" onclick="takeAnother()">
+            📸 Take Another
+        </button>
 
-    <div class="count-number" id="countNumber">
-        3
     </div>
 
 </div>
 
-<div class="flash" id="flash"></div>
+
+<div id="countdown" class="hidden">
+    3
+</div>
 
 
 <script type="module">
@@ -714,14 +334,14 @@
    FIREBASE
 ========================================================= */
 
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+import {
+    initializeApp
+} from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
 
 import {
     getAuth,
     signInAnonymously
-}
-from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+} from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
 
 import {
     getDatabase,
@@ -730,35 +350,34 @@ import {
     get,
     update,
     onValue,
-    remove,
     onDisconnect
-}
-from "https://www.gstatic.com/firebasejs/12.19.0/firebase-database.js";
+} from "https://www.gstatic.com/firebasejs/12.19.0/firebase-database.js";
 
-
-/* YOUR FIREBASE CONFIG */
 
 const firebaseConfig = {
 
     apiKey: "AIzaSyCsNfPivbsyheih1gc5AMyCnOJBtRj1WSE",
 
-    authDomain: "summmiieee-cd22d.firebaseapp.com",
+    authDomain:
+        "summmiieee-cd22d.firebaseapp.com",
 
     databaseURL:
         "https://summmiieee-cd22d-default-rtdb.firebaseio.com",
 
-    projectId: "summmiieee-cd22d",
+    projectId:
+        "summmiieee-cd22d",
 
     storageBucket:
         "summmiieee-cd22d.firebasestorage.app",
 
-    messagingSenderId: "285535265907",
+    messagingSenderId:
+        "285535265907",
 
     appId:
         "1:285535265907:web:e84304cbcca84dd7a6f606",
 
-    measurementId: "G-RJ94E7WDEQ"
-
+    measurementId:
+        "G-RJ94E7WDEQ"
 };
 
 
@@ -773,362 +392,48 @@ const db = getDatabase(app);
    VARIABLES
 ========================================================= */
 
-let currentUser = null;
+let user = null;
 
-let currentRoom = null;
+let roomCode = null;
 
-let isHost = false;
+let myName = "";
 
-let currentName = "";
+let myPhoto = null;
 
-let cameraStream = null;
+let partnerPhoto = null;
 
-let usingFrontCamera = true;
+let ready = false;
 
-let currentFilter = "normal";
-
-let roomUnsubscribe = null;
-
-let alreadyCaptured = false;
+let currentScene = "pink";
 
 
 /* =========================================================
    AUTH
 ========================================================= */
 
-async function login() {
+async function startFirebase() {
 
     try {
 
-        const result = await signInAnonymously(auth);
+        const result =
+            await signInAnonymously(auth);
 
-        currentUser = result.user;
+        user = result.user;
 
-        console.log("Firebase connected:", currentUser.uid);
+        document.querySelector("#homeStatus").textContent =
+            "Connected to Firebase 💗";
 
     } catch (error) {
 
         console.error(error);
 
-        showHomeError(
-            "Firebase Authentication failed. Make sure Anonymous sign-in is enabled."
-        );
-
+        document.querySelector("#homeStatus").textContent =
+            "Firebase connection failed: " +
+            error.message;
     }
-
 }
 
-login();
-
-
-/* =========================================================
-   TAB SWITCHING
-========================================================= */
-
-window.switchTab = function(tab) {
-
-    document
-        .querySelectorAll(".tab")
-        .forEach(button => button.classList.remove("active"));
-
-    document
-        .querySelectorAll(".form")
-        .forEach(form => form.classList.remove("active"));
-
-    if (tab === "create") {
-
-        document
-            .querySelectorAll(".tab")[0]
-            .classList.add("active");
-
-        document
-            .getElementById("createForm")
-            .classList.add("active");
-
-    } else {
-
-        document
-            .querySelectorAll(".tab")[1]
-            .classList.add("active");
-
-        document
-            .getElementById("joinForm")
-            .classList.add("active");
-
-    }
-
-};
-
-
-/* =========================================================
-   ROOM CODE
-========================================================= */
-
-function generateRoomCode() {
-
-    const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-
-    let code = "";
-
-    for (let i = 0; i < 6; i++) {
-
-        code += chars[
-            Math.floor(Math.random() * chars.length)
-        ];
-
-    }
-
-    return code;
-
-}
-
-
-/* =========================================================
-   CREATE ROOM
-========================================================= */
-
-window.createRoom = async function() {
-
-    if (!currentUser) {
-
-        showHomeError("Still connecting to Firebase... wait a second.");
-
-        return;
-
-    }
-
-    const name =
-        document
-            .getElementById("createName")
-            .value
-            .trim();
-
-    if (!name) {
-
-        showHomeError("Enter your name first 💗");
-
-        return;
-
-    }
-
-    currentName = name;
-
-    const code = generateRoomCode();
-
-    currentRoom = code;
-
-    isHost = true;
-
-    showLoading(true);
-
-    try {
-
-        const roomRef =
-            ref(db, "rooms/" + code);
-
-        await set(roomRef, {
-
-            host: currentUser.uid,
-
-            createdAt: Date.now(),
-
-            participants: {
-
-                [currentUser.uid]: {
-
-                    name: name,
-
-                    ready: false,
-
-                    online: true,
-
-                    photo: null
-
-                }
-
-            },
-
-            captureStarted: false,
-
-            captureAt: null
-
-        });
-
-        await onDisconnect(
-            ref(db, `rooms/${code}/participants/${currentUser.uid}`)
-        ).update({
-            online: false
-        });
-
-        await startRoom();
-
-    } catch (error) {
-
-        console.error(error);
-
-        showHomeError(
-            "Couldn't create the room: " + error.message
-        );
-
-    }
-
-    showLoading(false);
-
-};
-
-
-/* =========================================================
-   JOIN ROOM
-========================================================= */
-
-window.joinRoom = async function() {
-
-    if (!currentUser) {
-
-        showHomeError("Still connecting to Firebase... wait a second.");
-
-        return;
-
-    }
-
-    const name =
-        document
-            .getElementById("joinName")
-            .value
-            .trim();
-
-    const code =
-        document
-            .getElementById("joinCode")
-            .value
-            .trim()
-            .toUpperCase();
-
-    if (!name) {
-
-        showHomeError("Enter your name first 💗");
-
-        return;
-
-    }
-
-    if (code.length !== 6) {
-
-        showHomeError("Room codes have 6 characters.");
-
-        return;
-
-    }
-
-    showLoading(true);
-
-    try {
-
-        const roomRef =
-            ref(db, "rooms/" + code);
-
-        const snapshot =
-            await get(roomRef);
-
-        if (!snapshot.exists()) {
-
-            showHomeError("That room doesn't exist 😭");
-
-            showLoading(false);
-
-            return;
-
-        }
-
-        const room = snapshot.val();
-
-        const participants =
-            room.participants || {};
-
-        if (
-            Object.keys(participants).length >= 2 &&
-            !participants[currentUser.uid]
-        ) {
-
-            showHomeError("That room is already full.");
-
-            showLoading(false);
-
-            return;
-
-        }
-
-        currentName = name;
-
-        currentRoom = code;
-
-        isHost = false;
-
-        await update(
-            ref(
-                db,
-                `rooms/${code}/participants/${currentUser.uid}`
-            ),
-            {
-
-                name: name,
-
-                ready: false,
-
-                online: true,
-
-                photo: null
-
-            }
-        );
-
-        await onDisconnect(
-            ref(
-                db,
-                `rooms/${code}/participants/${currentUser.uid}`
-            )
-        ).update({
-            online: false
-        });
-
-        await startRoom();
-
-    } catch (error) {
-
-        console.error(error);
-
-        showHomeError(
-            "Couldn't join the room: " + error.message
-        );
-
-    }
-
-    showLoading(false);
-
-};
-
-
-/* =========================================================
-   START ROOM
-========================================================= */
-
-async function startRoom() {
-
-    showScreen("roomScreen");
-
-    document
-        .getElementById("roomCodeDisplay")
-        .textContent = currentRoom;
-
-    document
-        .getElementById("localName")
-        .textContent = currentName;
-
-    await startCamera();
-
-    listenToRoom();
-
-}
+startFirebase();
 
 
 /* =========================================================
@@ -1139,322 +444,360 @@ async function startCamera() {
 
     try {
 
-        if (cameraStream) {
-
-            cameraStream
-                .getTracks()
-                .forEach(track => track.stop());
-
-        }
-
-        cameraStream =
+        const stream =
             await navigator.mediaDevices.getUserMedia({
 
                 video: {
-
-                    facingMode:
-                        usingFrontCamera
-                            ? "user"
-                            : "environment",
-
-                    width: {
-                        ideal: 1280
-                    },
-
-                    height: {
-                        ideal: 720
-                    }
-
+                    facingMode: "user",
+                    width: 1280,
+                    height: 720
                 },
 
                 audio: false
 
             });
 
-        const video =
-            document.getElementById("localVideo");
-
-        video.srcObject = cameraStream;
-
-        video.style.transform =
-            usingFrontCamera
-                ? "scaleX(-1)"
-                : "scaleX(1)";
+        document.querySelector("#myVideo").srcObject =
+            stream;
 
     } catch (error) {
 
-        console.error(error);
-
-        showRoomError(
-            "Camera access failed. Please allow camera permission in your browser."
+        alert(
+            "Camera permission is needed for the photobooth 📸"
         );
 
+        console.error(error);
     }
+}
+
+
+/* =========================================================
+   HOME
+========================================================= */
+
+window.showJoin = function() {
+
+    document.querySelector("#joinArea")
+        .classList.remove("hidden");
+
+};
+
+
+/* =========================================================
+   CREATE ROOM
+========================================================= */
+
+function generateCode() {
+
+    const chars =
+        "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+
+    let code = "";
+
+    for (let i = 0; i < 6; i++) {
+
+        code +=
+            chars[Math.floor(Math.random() * chars.length)];
+
+    }
+
+    return code;
+}
+
+
+window.createRoom = async function() {
+
+    if (!user) {
+
+        alert("Still connecting to Firebase. Wait a moment!");
+
+        return;
+    }
+
+    myName =
+        document.querySelector("#nameInput").value.trim()
+        || "Person 1";
+
+    roomCode =
+        generateCode();
+
+    await set(
+        ref(db, "rooms/" + roomCode),
+        {
+            createdAt: Date.now(),
+
+            participants: {
+
+                [user.uid]: {
+
+                    name: myName,
+
+                    ready: false,
+
+                    online: true,
+
+                    photo: null
+
+                }
+
+            }
+
+        }
+    );
+
+    enterRoom();
+
+};
+
+
+/* =========================================================
+   JOIN ROOM
+========================================================= */
+
+window.joinRoom = async function() {
+
+    if (!user) {
+
+        alert("Still connecting to Firebase!");
+
+        return;
+    }
+
+    myName =
+        document.querySelector("#nameInput").value.trim()
+        || "Person 2";
+
+    roomCode =
+        document.querySelector("#roomInput")
+        .value.trim()
+        .toUpperCase();
+
+    if (!roomCode) {
+
+        alert("Enter the room code 💗");
+
+        return;
+    }
+
+    const roomRef =
+        ref(db, "rooms/" + roomCode);
+
+    const snapshot =
+        await get(roomRef);
+
+    if (!snapshot.exists()) {
+
+        alert("That room doesn't exist 😭");
+
+        return;
+    }
+
+    await update(
+
+        ref(
+            db,
+            "rooms/" +
+            roomCode +
+            "/participants/" +
+            user.uid
+        ),
+
+        {
+            name: myName,
+
+            ready: false,
+
+            online: true,
+
+            photo: null
+        }
+
+    );
+
+    enterRoom();
+
+};
+
+
+/* =========================================================
+   ENTER ROOM
+========================================================= */
+
+function enterRoom() {
+
+    document.querySelector("#home")
+        .classList.add("hidden");
+
+    document.querySelector("#room")
+        .classList.remove("hidden");
+
+    document.querySelector("#roomCode")
+        .textContent = roomCode;
+
+    document.querySelector("#myName")
+        .textContent = myName;
+
+    startCamera();
+
+    listenToRoom();
+
+    onDisconnect(
+
+        ref(
+            db,
+            "rooms/" +
+            roomCode +
+            "/participants/" +
+            user.uid
+        )
+
+    ).update({
+        online: false
+    });
 
 }
 
 
 /* =========================================================
-   SWITCH CAMERA
-========================================================= */
-
-window.switchCamera = async function() {
-
-    usingFrontCamera = !usingFrontCamera;
-
-    await startCamera();
-
-};
-
-
-/* =========================================================
-   FILTERS
-========================================================= */
-
-window.setFilter = function(filter, button) {
-
-    currentFilter = filter;
-
-    document
-        .querySelectorAll(".filter-btn")
-        .forEach(btn => btn.classList.remove("active"));
-
-    button.classList.add("active");
-
-    const video =
-        document.getElementById("localVideo");
-
-    const filters = {
-
-        normal: "none",
-
-        bw: "grayscale(1)",
-
-        vintage:
-            "sepia(.55) contrast(1.1) saturate(.8)",
-
-        pink:
-            "sepia(.15) saturate(1.5) hue-rotate(320deg)",
-
-        dreamy:
-            "brightness(1.12) saturate(1.25) blur(.3px)"
-
-    };
-
-    video.style.filter =
-        filters[filter];
-
-};
-
-
-/* =========================================================
-   LISTEN TO ROOM
+   ROOM LISTENER
 ========================================================= */
 
 function listenToRoom() {
 
-    if (roomUnsubscribe) {
+    onValue(
 
-        roomUnsubscribe();
+        ref(db, "rooms/" + roomCode),
 
-    }
+        snapshot => {
 
-    const roomRef =
-        ref(db, "rooms/" + currentRoom);
+            const data = snapshot.val();
 
-    roomUnsubscribe =
-        onValue(roomRef, snapshot => {
+            if (!data) return;
 
-            if (!snapshot.exists()) {
+            const participants =
+                data.participants || {};
 
-                showHomeError("This room no longer exists.");
+            const ids =
+                Object.keys(participants);
 
-                showScreen("homeScreen");
+            const partnerId =
+                ids.find(id => id !== user.uid);
 
-                return;
 
+            /* Partner */
+
+            if (partnerId) {
+
+                const partner =
+                    participants[partnerId];
+
+                document.querySelector("#partnerName")
+                    .textContent =
+                    partner.name || "Your person";
+
+                document.querySelector("#partnerReadyText")
+                    .innerHTML =
+                    partner.ready
+                        ? '<span class="ready">READY 💗</span>'
+                        : "Not ready";
+
+                if (partner.photo) {
+
+                    partnerPhoto =
+                        partner.photo;
+
+                }
+
+            } else {
+
+                document.querySelector("#partnerName")
+                    .textContent =
+                    "Waiting for partner...";
+
+                document.querySelector("#partnerReadyText")
+                    .textContent =
+                    "Waiting...";
             }
 
-            const room = snapshot.val();
 
-            updateParticipants(room);
+            /* Me */
+
+            const me =
+                participants[user.uid];
+
+            if (me) {
+
+                ready =
+                    me.ready;
+
+                document.querySelector("#myReadyText")
+                    .innerHTML =
+                    ready
+                        ? '<span class="ready">READY 💗</span>'
+                        : "Not ready";
+            }
+
+
+            /* Both ready */
 
             if (
-                room.captureAt &&
-                !alreadyCaptured
+                ids.length >= 2 &&
+                ids.every(
+                    id =>
+                    participants[id].ready === true
+                ) &&
+                !data.captureAt
             ) {
 
-                scheduleCapture(room.captureAt);
+                startCountdown();
 
             }
 
-        });
 
-}
+            /* Capture timestamp */
 
+            if (data.captureAt) {
 
-/* =========================================================
-   PARTICIPANTS
-========================================================= */
+                const wait =
+                    data.captureAt - Date.now();
 
-function updateParticipants(room) {
+                if (wait > 0) {
 
-    const participants =
-        room.participants || {};
+                    setTimeout(
+                        capturePhoto,
+                        wait
+                    );
 
-    const entries =
-        Object.entries(participants);
+                } else {
 
-    const me =
-        participants[currentUser.uid];
+                    capturePhoto();
 
-    const partnerEntry =
-        entries.find(
-            ([uid]) => uid !== currentUser.uid
-        );
-
-    const partner =
-        partnerEntry
-            ? partnerEntry[1]
-            : null;
-
-
-    /* LOCAL */
-
-    if (me) {
-
-        document
-            .getElementById("localName")
-            .textContent =
-                me.name || currentName;
-
-    }
-
-
-    /* PARTNER */
-
-    if (partner) {
-
-        document
-            .getElementById("partnerName")
-            .textContent =
-                partner.name || "Partner";
-
-        document
-            .getElementById("partnerWaiting")
-            .innerHTML =
-                `
-                <span>📸</span>
-                ${partner.name || "Your person"} is here!
-                <small style="color:#ffffff66">
-                    Camera stays private on each device
-                </small>
-                `;
-
-    } else {
-
-        document
-            .getElementById("partnerName")
-            .textContent =
-                "Waiting...";
-
-        document
-            .getElementById("partnerWaiting")
-            .innerHTML =
-                `
-                <span>💗</span>
-                Waiting for your person to join...
-                `;
-
-    }
-
-
-    /* PEOPLE CARDS */
-
-    const cards = entries.slice(0, 2);
-
-    cards.forEach(([uid, person], index) => {
-
-        const number = index + 1;
-
-        document
-            .getElementById(`person${number}Name`)
-            .textContent =
-                person.name || "Unknown";
-
-        const status =
-            document
-                .getElementById(`person${number}Status`);
-
-        const card =
-            document
-                .getElementById(`person${number}`);
-
-        if (person.ready) {
-
-            status.innerHTML =
-                `<span class="check">✓ READY</span>`;
-
-            card.classList.add("ready");
-
-        } else {
-
-            status.textContent =
-                "Not ready";
-
-            card.classList.remove("ready");
-
-        }
-
-    });
-
-
-    if (entries.length < 2) {
-
-        document
-            .getElementById("statusText")
-            .textContent =
-                "Send the room code to your person 💌";
-
-        document
-            .getElementById("readyButton")
-            .disabled = true;
-
-    } else {
-
-        document
-            .getElementById("readyButton")
-            .disabled = false;
-
-        const allReady =
-            entries.length === 2 &&
-            entries.every(
-                ([, person]) => person.ready
-            );
-
-        if (allReady) {
-
-            document
-                .getElementById("statusText")
-                .textContent =
-                "Both ready! 📸";
-
-            if (isHost) {
-
-                startSynchronizedCapture();
+                }
 
             }
 
-        } else {
 
-            document
-                .getElementById("statusText")
-                .textContent =
-                "Waiting for both people to be ready...";
+            /* Both photos */
+
+            if (
+                participants[user.uid]?.photo &&
+                partnerId &&
+                participants[partnerId]?.photo
+            ) {
+
+                myPhoto =
+                    participants[user.uid].photo;
+
+                partnerPhoto =
+                    participants[partnerId].photo;
+
+                showResult();
+
+            }
 
         }
 
-    }
+    );
 
 }
 
@@ -1465,528 +808,436 @@ function updateParticipants(room) {
 
 window.toggleReady = async function() {
 
-    if (!currentRoom || !currentUser) return;
-
-    try {
-
-        const participantRef =
-            ref(
-                db,
-                `rooms/${currentRoom}/participants/${currentUser.uid}`
-            );
-
-        const snapshot =
-            await get(participantRef);
-
-        const person =
-            snapshot.val();
-
-        const newReady =
-            !(person?.ready);
-
-        await update(
-            participantRef,
-            {
-                ready: newReady,
-                online: true
-            }
-        );
-
-        const button =
-            document.getElementById("readyButton");
-
-        if (newReady) {
-
-            button.textContent =
-                "✓ READY!";
-
-        } else {
-
-            button.textContent =
-                "💗 I'M READY";
-
-        }
-
-    } catch (error) {
-
-        console.error(error);
-
-        showRoomError(error.message);
-
-    }
-
-};
-
-
-/* =========================================================
-   SYNCHRONIZED CAPTURE
-========================================================= */
-
-async function startSynchronizedCapture() {
-
-    const roomRef =
-        ref(db, "rooms/" + currentRoom);
-
-    const snapshot =
-        await get(roomRef);
-
-    const room =
-        snapshot.val();
-
-    if (room.captureAt) return;
-
-    /*
-       5 seconds from now.
-       Both browsers receive the same timestamp.
-    */
-
-    const captureAt =
-        Date.now() + 5000;
+    if (!roomCode || !user) return;
 
     await update(
-        roomRef,
+
+        ref(
+            db,
+            "rooms/" +
+            roomCode +
+            "/participants/" +
+            user.uid
+        ),
+
         {
-            captureAt: captureAt,
-            captureStarted: true
+            ready: !ready
         }
+
     );
 
-}
-
-
-/* =========================================================
-   SCHEDULE CAPTURE
-========================================================= */
-
-function scheduleCapture(timestamp) {
-
-    alreadyCaptured = true;
-
-    const difference =
-        timestamp - Date.now();
-
-    showCountdown(difference);
-
-    setTimeout(() => {
-
-        capturePhoto();
-
-    }, Math.max(0, difference));
-
-}
+};
 
 
 /* =========================================================
    COUNTDOWN
 ========================================================= */
 
-function showCountdown(milliseconds) {
+let countdownStarted = false;
 
-    const overlay =
-        document.getElementById("countdown");
+function startCountdown() {
 
-    const number =
-        document.getElementById("countNumber");
+    if (countdownStarted) return;
 
-    overlay.classList.add("show");
+    countdownStarted = true;
 
-    const end =
-        Date.now() + milliseconds;
+    const captureAt =
+        Date.now() + 4000;
 
-    function tick() {
+    update(
 
-        const remaining =
-            end - Date.now();
+        ref(
+            db,
+            "rooms/" + roomCode
+        ),
 
-        const seconds =
-            Math.ceil(remaining / 1000);
-
-        if (seconds <= 0) {
-
-            number.textContent = "📸";
-
-            setTimeout(() => {
-
-                overlay.classList.remove("show");
-
-            }, 300);
-
-            return;
-
+        {
+            captureAt
         }
 
-        number.textContent =
-            seconds;
-
-        number.style.animation =
-            "none";
-
-        void number.offsetWidth;
-
-        number.style.animation =
-            "pop .8s ease";
-
-        setTimeout(tick, 1000);
-
-    }
-
-    tick();
+    );
 
 }
 
 
 /* =========================================================
-   CAPTURE PHOTO
+   CAPTURE
 ========================================================= */
 
-async function capturePhoto() {
+let alreadyCaptured = false;
+
+function capturePhoto() {
+
+    if (alreadyCaptured) return;
+
+    alreadyCaptured = true;
 
     const video =
-        document.getElementById("localVideo");
-
-    if (!video.videoWidth) {
-
-        showRoomError(
-            "Camera isn't ready yet. Try again."
-        );
-
-        alreadyCaptured = false;
-
-        return;
-
-    }
+        document.querySelector("#myVideo");
 
     const canvas =
         document.createElement("canvas");
 
-    const width =
-        video.videoWidth;
+    canvas.width =
+        video.videoWidth || 1280;
 
-    const height =
-        video.videoHeight;
-
-    canvas.width = width;
-
-    canvas.height = height;
+    canvas.height =
+        video.videoHeight || 720;
 
     const ctx =
         canvas.getContext("2d");
 
+    /*
+       Mirror the webcam so the photo
+       feels like a selfie.
+    */
 
-    /* Mirror selfie */
+    ctx.translate(
+        canvas.width,
+        0
+    );
 
-    if (usingFrontCamera) {
-
-        ctx.translate(width, 0);
-
-        ctx.scale(-1, 1);
-
-    }
-
-
-    /* Apply filter to captured image */
-
-    const filters = {
-
-        normal: "none",
-
-        bw: "grayscale(1)",
-
-        vintage:
-            "sepia(.55) contrast(1.1) saturate(.8)",
-
-        pink:
-            "sepia(.15) saturate(1.5) hue-rotate(320deg)",
-
-        dreamy:
-            "brightness(1.12) saturate(1.25)"
-
-    };
-
-    ctx.filter =
-        filters[currentFilter];
-
+    ctx.scale(-1, 1);
 
     ctx.drawImage(
         video,
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+    myPhoto =
+        canvas.toDataURL(
+            "image/jpeg",
+            0.82
+        );
+
+
+    update(
+
+        ref(
+            db,
+            "rooms/" +
+            roomCode +
+            "/participants/" +
+            user.uid
+        ),
+
+        {
+            photo: myPhoto
+        }
+
+    );
+
+}
+
+
+/* =========================================================
+   SHOW RESULT
+========================================================= */
+
+function showResult() {
+
+    document.querySelector("#room")
+        .classList.add("hidden");
+
+    document.querySelector("#result")
+        .classList.remove("hidden");
+
+    countdownStarted = false;
+
+    drawTogetherPhoto();
+
+}
+
+
+/* =========================================================
+   SHARED BACKGROUND
+========================================================= */
+
+function background(ctx, width, height) {
+
+    let gradient;
+
+    if (currentScene === "galaxy") {
+
+        gradient =
+            ctx.createRadialGradient(
+                width * .5,
+                height * .4,
+                20,
+                width * .5,
+                height * .5,
+                width
+            );
+
+        gradient.addColorStop(
+            0,
+            "#5b2c83"
+        );
+
+        gradient.addColorStop(
+            1,
+            "#09051a"
+        );
+
+    }
+
+    else if (currentScene === "sunset") {
+
+        gradient =
+            ctx.createLinearGradient(
+                0,
+                0,
+                0,
+                height
+            );
+
+        gradient.addColorStop(
+            0,
+            "#ff9a9e"
+        );
+
+        gradient.addColorStop(
+            1,
+            "#fad0c4"
+        );
+
+    }
+
+    else if (currentScene === "room") {
+
+        gradient =
+            ctx.createLinearGradient(
+                0,
+                0,
+                0,
+                height
+            );
+
+        gradient.addColorStop(
+            0,
+            "#7d4e75"
+        );
+
+        gradient.addColorStop(
+            1,
+            "#2c1830"
+        );
+
+    }
+
+    else {
+
+        gradient =
+            ctx.createLinearGradient(
+                0,
+                0,
+                width,
+                height
+            );
+
+        gradient.addColorStop(
+            0,
+            "#ff758c"
+        );
+
+        gradient.addColorStop(
+            1,
+            "#ff7eb3"
+        );
+
+    }
+
+    ctx.fillStyle = gradient;
+
+    ctx.fillRect(
         0,
         0,
         width,
         height
     );
 
-    ctx.filter = "none";
 
+    /* Decorative hearts */
 
-    /* Flash */
+    ctx.font = "35px Arial";
 
-    const flash =
-        document.getElementById("flash");
+    ctx.globalAlpha = .35;
 
-    flash.classList.remove("active");
+    const hearts = [
+        [60,70],
+        [width-80,100],
+        [width-130,height-70],
+        [90,height-100],
+        [width/2,60]
+    ];
 
-    void flash.offsetWidth;
+    hearts.forEach(
+        ([x,y]) =>
+            ctx.fillText(
+                "♥",
+                x,
+                y
+            )
+    );
 
-    flash.classList.add("active");
-
-
-    /*
-       Compress photo so Firebase doesn't get
-       an enormous file.
-    */
-
-    const photo =
-        canvas.toDataURL(
-            "image/jpeg",
-            0.65
-        );
-
-
-    try {
-
-        await update(
-            ref(
-                db,
-                `rooms/${currentRoom}/participants/${currentUser.uid}`
-            ),
-            {
-                photo: photo,
-                ready: false,
-                online: true
-            }
-        );
-
-        waitForBothPhotos();
-
-    } catch (error) {
-
-        console.error(error);
-
-        showRoomError(
-            "Couldn't upload your photo: " +
-            error.message
-        );
-
-        alreadyCaptured = false;
-
-    }
+    ctx.globalAlpha = 1;
 
 }
 
 
 /* =========================================================
-   WAIT FOR BOTH PHOTOS
+   COMBINE PHOTOS
 ========================================================= */
 
-function waitForBothPhotos() {
+function drawTogetherPhoto() {
 
-    document
-        .getElementById("statusText")
-        .textContent =
-        "Your photo is ready! Waiting for your person... 💗";
-
-    const roomRef =
-        ref(db, "rooms/" + currentRoom);
-
-    const unsubscribe =
-        onValue(roomRef, snapshot => {
-
-            if (!snapshot.exists()) return;
-
-            const room =
-                snapshot.val();
-
-            const participants =
-                room.participants || {};
-
-            const entries =
-                Object.entries(participants);
-
-            if (entries.length < 2) return;
-
-            const photos =
-                entries
-                    .map(([, person]) => person.photo)
-                    .filter(Boolean);
-
-            if (photos.length === 2) {
-
-                unsubscribe();
-
-                createResult(
-                    entries[0][1],
-                    entries[1][1]
-                );
-
-            }
-
-        });
-
-}
-
-
-/* =========================================================
-   CREATE RESULT
-========================================================= */
-
-function createResult(personA, personB) {
-
-    showScreen("resultScreen");
+    if (!myPhoto || !partnerPhoto) return;
 
     const canvas =
-        document.getElementById("resultCanvas");
+        document.querySelector("#resultCanvas");
 
     const ctx =
         canvas.getContext("2d");
 
-    const imageA =
+    const img1 =
         new Image();
 
-    const imageB =
+    const img2 =
         new Image();
 
-    imageA.src =
-        personA.photo;
+    img1.onload = () => {
 
-    imageB.src =
-        personB.photo;
+        img2.onload = () => {
 
+            const width = 1000;
 
-    Promise.all([
+            const height = 750;
 
-        new Promise(resolve => {
-            imageA.onload = resolve;
-        }),
+            canvas.width = width;
 
-        new Promise(resolve => {
-            imageB.onload = resolve;
-        })
-
-    ]).then(() => {
-
-        const width = 1000;
-
-        const photoWidth = 480;
-
-        const photoHeight =
-            Math.round(
-                photoWidth *
-                (imageA.height / imageA.width)
-            );
-
-        const gap = 20;
-
-        const top = 100;
-
-        const bottom = 70;
-
-        const totalHeight =
-            top +
-            photoHeight +
-            bottom;
-
-        canvas.width = width;
-
-        canvas.height = totalHeight;
+            canvas.height = height;
 
 
-        /* Background */
+            /*
+              Shared background.
+            */
 
-        const gradient =
-            ctx.createLinearGradient(
-                0,
-                0,
+            background(
+                ctx,
                 width,
-                totalHeight
+                height
             );
 
-        gradient.addColorStop(
-            0,
-            "#ffedf4"
-        );
 
-        gradient.addColorStop(
-            1,
-            "#eadcff"
-        );
+            /*
+              This is the simple browser-safe
+              "together" composition.
 
-        ctx.fillStyle =
-            gradient;
+              The two photos are cropped and
+              placed into the same scene.
+            */
 
-        ctx.fillRect(
-            0,
-            0,
-            width,
-            totalHeight
-        );
+            const personWidth = 440;
+
+            const personHeight = 620;
 
 
-        /* Title */
+            ctx.save();
 
-        ctx.fillStyle =
-            "#48152d";
+            ctx.beginPath();
 
-        ctx.font =
-            "bold 42px Arial";
+            ctx.roundRect(
+                55,
+                90,
+                personWidth,
+                personHeight,
+                35
+            );
 
-        ctx.textAlign =
-            "center";
+            ctx.clip();
 
-        ctx.fillText(
-            "OUR MOMENT 💗",
-            width / 2,
-            60
-        );
+            drawCover(
+                ctx,
+                img1,
+                55,
+                90,
+                personWidth,
+                personHeight
+            );
 
-
-        /* Photos */
-
-        drawCover(
-            ctx,
-            imageA,
-            10,
-            top,
-            photoWidth,
-            photoHeight
-        );
-
-        drawCover(
-            ctx,
-            imageB,
-            510,
-            top,
-            photoWidth,
-            photoHeight
-        );
+            ctx.restore();
 
 
-        /* Names */
+            ctx.save();
 
-        ctx.fillStyle =
-            "#48152d";
+            ctx.beginPath();
 
-        ctx.font =
-            "bold 22px Arial";
+            ctx.roundRect(
+                505,
+                90,
+                personWidth,
+                personHeight,
+                35
+            );
 
-        ctx.fillText(
-            personA.name || "You",
-            250,
-            totalHeight - 30
-        );
+            ctx.clip();
 
-        ctx.fillText(
-            personB.name || "Partner",
-            750,
-            totalHeight - 30
-        );
+            drawCover(
+                ctx,
+                img2,
+                505,
+                90,
+                personWidth,
+                personHeight
+            );
 
-    });
+            ctx.restore();
+
+
+            /*
+              Couple-style center decoration.
+            */
+
+            ctx.font =
+                "bold 55px Arial";
+
+            ctx.textAlign =
+                "center";
+
+            ctx.fillText(
+                "♥",
+                width / 2,
+                height - 55
+            );
+
+
+            ctx.font =
+                "bold 28px Arial";
+
+            ctx.fillText(
+                "US • TOGETHER",
+                width / 2,
+                50
+            );
+
+        };
+
+        img2.src =
+            partnerPhoto;
+
+    };
+
+    img1.src =
+        myPhoto;
 
 }
 
 
 /* =========================================================
-   DRAW COVER
+   COVER IMAGE
 ========================================================= */
 
 function drawCover(
@@ -2001,40 +1252,43 @@ function drawCover(
     const imageRatio =
         image.width / image.height;
 
-    const targetRatio =
+    const boxRatio =
         width / height;
 
-    let sx = 0;
-    let sy = 0;
-    let sw = image.width;
-    let sh = image.height;
+    let sourceWidth =
+        image.width;
 
-    if (imageRatio > targetRatio) {
+    let sourceHeight =
+        image.height;
 
-        sw =
-            image.height *
-            targetRatio;
+    let sourceX = 0;
 
-        sx =
-            (image.width - sw) / 2;
+    let sourceY = 0;
+
+    if (imageRatio > boxRatio) {
+
+        sourceWidth =
+            image.height * boxRatio;
+
+        sourceX =
+            (image.width - sourceWidth) / 2;
 
     } else {
 
-        sh =
-            image.width /
-            targetRatio;
+        sourceHeight =
+            image.width / boxRatio;
 
-        sy =
-            (image.height - sh) / 2;
+        sourceY =
+            (image.height - sourceHeight) / 2;
 
     }
 
     ctx.drawImage(
         image,
-        sx,
-        sy,
-        sw,
-        sh,
+        sourceX,
+        sourceY,
+        sourceWidth,
+        sourceHeight,
         x,
         y,
         width,
@@ -2045,19 +1299,45 @@ function drawCover(
 
 
 /* =========================================================
+   SCENE
+========================================================= */
+
+window.changeScene = function(
+    scene,
+    button
+) {
+
+    currentScene =
+        scene;
+
+    document
+        .querySelectorAll(".scene-buttons button")
+        .forEach(
+            b =>
+            b.classList.remove("active")
+        );
+
+    button.classList.add("active");
+
+    drawTogetherPhoto();
+
+};
+
+
+/* =========================================================
    DOWNLOAD
 ========================================================= */
 
-window.downloadResult = function() {
+window.downloadPhoto = function() {
 
     const canvas =
-        document.getElementById("resultCanvas");
+        document.querySelector("#resultCanvas");
 
     const link =
         document.createElement("a");
 
     link.download =
-        "our-ldr-moment.png";
+        "us-together-photobooth.png";
 
     link.href =
         canvas.toDataURL("image/png");
@@ -2068,208 +1348,63 @@ window.downloadResult = function() {
 
 
 /* =========================================================
-   TAKE ANOTHER
+   RESET
 ========================================================= */
 
 window.takeAnother = async function() {
 
     alreadyCaptured = false;
 
-    try {
+    countdownStarted = false;
 
-        const roomRef =
-            ref(db, "rooms/" + currentRoom);
+    myPhoto = null;
+
+    partnerPhoto = null;
+
+    ready = false;
+
+    document.querySelector("#result")
+        .classList.add("hidden");
+
+    document.querySelector("#room")
+        .classList.remove("hidden");
+
+
+    if (roomCode && user) {
 
         await update(
-            roomRef,
-            {
-                captureAt: null,
-                captureStarted: false
-            }
-        );
 
-        await update(
             ref(
                 db,
-                `rooms/${currentRoom}/participants/${currentUser.uid}`
+                "rooms/" +
+                roomCode +
+                "/participants/" +
+                user.uid
             ),
+
             {
                 ready: false,
                 photo: null
             }
+
         );
 
-        showScreen("roomScreen");
+        await update(
 
-        document
-            .getElementById("readyButton")
-            .textContent =
-            "💗 I'M READY";
+            ref(
+                db,
+                "rooms/" + roomCode
+            ),
 
-    } catch (error) {
-
-        console.error(error);
-
-        showRoomError(error.message);
-
-    }
-
-};
-
-
-/* =========================================================
-   LEAVE ROOM
-========================================================= */
-
-window.leaveRoom = async function() {
-
-    if (cameraStream) {
-
-        cameraStream
-            .getTracks()
-            .forEach(track => track.stop());
-
-        cameraStream = null;
-
-    }
-
-    if (roomUnsubscribe) {
-
-        roomUnsubscribe();
-
-        roomUnsubscribe = null;
-
-    }
-
-    if (currentRoom && currentUser) {
-
-        try {
-
-            const participantRef =
-                ref(
-                    db,
-                    `rooms/${currentRoom}/participants/${currentUser.uid}`
-                );
-
-            await remove(participantRef);
-
-            if (isHost) {
-
-                /*
-                   Don't immediately delete the room here,
-                   because the other person may still be looking
-                   at the result.
-                */
-
+            {
+                captureAt: null
             }
 
-        } catch (error) {
-
-            console.error(error);
-
-        }
+        );
 
     }
-
-    currentRoom = null;
-
-    isHost = false;
-
-    alreadyCaptured = false;
-
-    showScreen("homeScreen");
 
 };
-
-
-/* =========================================================
-   SCREEN
-========================================================= */
-
-function showScreen(id) {
-
-    document
-        .querySelectorAll(".screen")
-        .forEach(screen => {
-
-            screen.classList.remove("active");
-
-        });
-
-    document
-        .getElementById(id)
-        .classList.add("active");
-
-}
-
-
-/* =========================================================
-   ERRORS
-========================================================= */
-
-function showHomeError(message) {
-
-    const error =
-        document.getElementById("homeError");
-
-    error.textContent =
-        message;
-
-    error.style.display =
-        "block";
-
-}
-
-function showRoomError(message) {
-
-    const error =
-        document.getElementById("roomError");
-
-    error.textContent =
-        message;
-
-    error.style.display =
-        "block";
-
-    setTimeout(() => {
-
-        error.style.display =
-            "none";
-
-    }, 6000);
-
-}
-
-function showLoading(show) {
-
-    document
-        .getElementById("loading")
-        .style.display =
-        show
-            ? "block"
-            : "none";
-
-}
-
-
-/* =========================================================
-   CLEANUP
-========================================================= */
-
-window.addEventListener(
-    "beforeunload",
-    () => {
-
-        if (cameraStream) {
-
-            cameraStream
-                .getTracks()
-                .forEach(track => track.stop());
-
-        }
-
-    }
-);
 
 </script>
 
